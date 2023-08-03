@@ -177,7 +177,7 @@ add_library(arm_control
 
 # add_executable(${PROJECT_NAME}_node src/arm_control_node.cpp)
 # add_executable(robot ${ROBOT_SOURCES} ${ROBOT_LIBCAN_SOURCES} ${ROBOT_HARDWARE_SOURCES} ${ROBOT_APP_SOURCES})
-# add_executable(robot src/arx_5v.cpp)
+add_executable(driver_test src/driver_test.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -187,10 +187,10 @@ add_library(arm_control
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(robot ${PROJECT_NAME}_gencfg)
+add_dependencies(driver_test ${PROJECT_NAME}_gencfg)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(robot ${catkin_LIBRARIES} arm_control)
+target_link_libraries(driver_test ${catkin_LIBRARIES} arm_control)
 
 #############
 ## Install ##

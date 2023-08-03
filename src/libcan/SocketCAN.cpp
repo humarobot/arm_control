@@ -82,10 +82,10 @@ void SocketCAN::open(const char *interface) {
 void SocketCAN::close() {
   printf("Waiting for receiver thread to terminate.\n");
 
-  terminate_receiver_thread = true;
-  while (receiver_thread_running) {
-    sleep(1);
-  }
+  // terminate_receiver_thread = true;
+  // while (receiver_thread_running) {
+  //   sleep(1);
+  // }
 
   if (!is_open())
     return;
@@ -110,17 +110,12 @@ void SocketCAN::transmit(can_frame_t *frame) {
 }
 
 void SocketCAN::socketcan_receiver_thread() {
-  /*
-   * The first and only argument to this function
-   * is the pointer to the object, which started the thread.
-   */
-  SocketCAN *sock = this;
 
   // Holds the set of descriptors, that 'select' shall monitor
   fd_set descriptors;
 
   // Highest file descriptor in set
-  int maxfd = sock->sockfd;
+  int maxfd = this->sockfd;
 
   // How long 'select' shall wait before returning with timeout
   struct timeval timeout;
@@ -129,14 +124,14 @@ void SocketCAN::socketcan_receiver_thread() {
   can_frame_t rx_frame;
 
   // Set running flag
-  sock->receiver_thread_running = true;
+  // sock->receiver_thread_running = true;
 
   // Run until termination signal received
-  while (!sock->terminate_receiver_thread) {
+  // while (!sock->terminate_receiver_thread) {
     // Clear descriptor set
     FD_ZERO(&descriptors);
     // Add socket descriptor
-    FD_SET(sock->sockfd, &descriptors);
+    FD_SET(this->sockfd, &descriptors);
     //        printf("Added %d to monitored descriptors.\n", sock->sockfd);
 
     // Set timeout
@@ -146,32 +141,32 @@ void SocketCAN::socketcan_receiver_thread() {
     // Wait until timeout or activity on any descriptor
     if (select(maxfd + 1, &descriptors, NULL, NULL, &timeout) == 1) {
       //            printf("Something happened.\n");
-      int len = read(sock->sockfd, &rx_frame, CAN_MTU);
+      int len = read(this->sockfd, &rx_frame, CAN_MTU);
       //            printf("Received %d bytes: Frame from 0x%0X, DLC=%d\n", len,
       //            rx_frame.can_id, rx_frame.can_dlc);
 
       if (len < 0)
-        continue;
+        return;
 
-      if (sock->reception_handler != NULL) {
-        sock->reception_handler(&rx_frame, sock->reception_handler_data);
+      if (this->reception_handler != NULL) {
+        this->reception_handler(&rx_frame, this->reception_handler_data);
       }
 
-      if (sock->parser != NULL) {
+      if (this->parser != NULL) {
         //                printf("Invoking parser...\n");
-        sock->parser->parse_frame(&rx_frame);
+        this->parser->parse_frame(&rx_frame);
       } else {
         //                printf("sock->parser is NULL.\n");
       }
     } else {
       //            printf("Received nothing.\n");
     }
-  }
+  // }
 
-  printf("Receiver thread terminated.\n");
+  // printf("Receiver thread terminated.\n");
 
   // Thread terminates
-  sock->receiver_thread_running = false;
+  // sock->receiver_thread_running = false;
 
 }
 
