@@ -80,12 +80,6 @@ void SocketCAN::open(const char *interface) {
 }
 
 void SocketCAN::close() {
-  printf("Waiting for receiver thread to terminate.\n");
-
-  // terminate_receiver_thread = true;
-  // while (receiver_thread_running) {
-  //   sleep(1);
-  // }
 
   if (!is_open())
     return;

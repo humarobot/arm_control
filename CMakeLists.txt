@@ -143,6 +143,7 @@ add_library(arm_control
    src/libcan/CANFrameParser.cpp
    src/libcan/SocketCAN.cpp
    src/utility.cpp
+   src/ArxDriver.cpp
  )
  target_link_libraries(arm_control PUBLIC ${catkin_LIBRARIES})
 
@@ -177,7 +178,7 @@ add_library(arm_control
 
 # add_executable(${PROJECT_NAME}_node src/arm_control_node.cpp)
 # add_executable(robot ${ROBOT_SOURCES} ${ROBOT_LIBCAN_SOURCES} ${ROBOT_HARDWARE_SOURCES} ${ROBOT_APP_SOURCES})
-add_executable(driver_test src/driver_test.cpp)
+add_executable(driver_test src/driver_test.cpp src/ArxDriver.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

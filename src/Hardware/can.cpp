@@ -224,3 +224,12 @@ void can::CAN_RMD_chassis(int16_t motor1, int16_t motor2, int16_t motor3,
     std::cout << "Fail to open can2" << std::endl;
   }
 }
+
+void can::SendRecOnce(){
+  this->Can_cmd_all(1, 0, 10, 0, 0, 0);
+  this->Can_cmd_all(2, 0, 10, 0, 0, 0);
+  this->Can_cmd_all(4, 0, 10, 0, 0, 0);
+  this->Can_cmd_all(5, 0, 0.2, 0, 0, 0);
+  this->Can_cmd_all(6, 0, 0.2, 0, 0, 0);
+  this->Can_cmd_all(7, 0, 0.2, 0, 0, 0);
+}

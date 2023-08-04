@@ -43,12 +43,6 @@ public:
    */
   int sockfd = -1;
 
-  /**
-   * Request for the child thread to terminate
-   */
-  bool terminate_receiver_thread = false;
-
-  bool receiver_thread_running = false;
 
   /** Constructor */
   SocketCAN();

@@ -80,6 +80,7 @@ public:
   void CAN_RMD_chassis(int16_t motor1, int16_t motor2, int16_t motor3,
                        int16_t motor4);
 
+  void SendRecOnce();
   SocketCAN can2_adapter;
 };
 
