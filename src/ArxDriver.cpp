@@ -1,7 +1,7 @@
 #include "ArxDriver.h"
 
 void ArxDriver::Init() {
-  std::cout << "ArxDriver: Can initializing ... " << std::endl;
+  std::cout << "ArxMotors: Can initializing ... " << std::endl;
   InitCan();
   can_size = sizeof(struct can_frame);
   last_time_ = high_resolution_clock::now();
@@ -84,16 +84,19 @@ void ArxDriver::StatisticPrinter(int index) {
 
 void ArxDriver::MsgToRaw(int id, struct can_frame& frame) {
   frame.can_dlc = 8;
-  send_motor_ctrl_cmd(id, 0, 0, 0, 0, 0, frame.data, &frame.can_id);
+  send_motor_ctrl_cmd(id, 0, 0.5, 0, 0, 0, frame.data, &frame.can_id);
 }
 
 void ArxDriver::RawToMsg(int motor_id, struct can_frame& frame) {
   if (motor_id >= 0 && motor_id <= 7) {
     RV_can_data_repack(frame.can_id, frame.data, frame.can_dlc, 0);
-    std::cout << "motor_id: " << rv_motor_msg[motor_id - 1].motor_id << std::endl;
-    std::cout << "motor_angle: " << rv_motor_msg[motor_id - 1].angle_actual_rad << std::endl;
-    std::cout << "motor_speed: " << rv_motor_msg[motor_id - 1].speed_actual_rad << std::endl;
-    std::cout << "motor_torque: " << rv_motor_msg[motor_id - 1].current_actual_float << std::endl;
+    // if(motor_id==6){
+    // std::cout << "motor_id: " << rv_motor_msg[motor_id - 1].motor_id << std::endl;
+    // std::cout << "motor_angle: " << rv_motor_msg[motor_id - 1].angle_actual_rad << std::endl;
+    // std::cout << "motor_speed: " << rv_motor_msg[motor_id - 1].speed_actual_rad << std::endl;
+    // std::cout << "motor_torque: " << rv_motor_msg[motor_id - 1].current_actual_float << std::endl;
+   
+    // }
     frame_num_[motor_id - 1]++;
   }
 }
@@ -107,5 +110,5 @@ void ArxDriver::CleanUp() {
       int nbytes = write(_s2, &frame, can_size);
     }
   }
-  std::cout << "ArxDriver: Clean Done!!!!" << std::endl;
+  std::cerr << "ArxDriver: Clean Done!!!!" << std::endl;
 }

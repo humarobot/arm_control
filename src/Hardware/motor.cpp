@@ -182,7 +182,7 @@ void RV_can_data_repack(uint32_t msgID, uint8_t *Data, int32_t databufferlen,
   {
     ack_status = Data[0] >> 5;
     motor_id_t = msgID - 1;
-    rv_motor_msg[motor_id_t].motor_id = motor_id_t;
+    rv_motor_msg[motor_id_t].motor_id = msgID;
     rv_motor_msg[motor_id_t].error = Data[0] & 0x1F;
     if (ack_status == 1) // response frame 1
     {
